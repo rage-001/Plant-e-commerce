@@ -1,1 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plant E-Commerce</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        display: flex;
+    }
+    /* Sidebar */
+    .sidebar {
+        width: 200px;
+        background: #2f4f4f;
+        color: white;
+        height: 100vh;
+        padding-top: 20px;
+        position: fixed;
+    }
+    .sidebar a {
+        display: block;
+        padding: 10px;
+        color: white;
+        text-decoration: none;
+    }
+    .sidebar a:hover {
+        background: #3d5c5c;
+    }
+    /* Main Content */
+    .main {
+        margin-left: 200px;
+        width: 100%;
+    }
+    /* Navbar */
+    .navbar {
+        background: #4caf50;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+    }
+    .navbar input {
+        padding: 5px;
+        width: 200px;
+    }
+    .navbar button {
+        background: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+    /* Product Grid */
+    .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        padding: 20px;
+    }
+    .product {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+    }
+    .product img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+    }
+    .btn {
+        margin: 5px;
+        padding: 5px;
+        cursor: pointer;
+        border: none;
+        background: #4caf50;
+        color: white;
+    }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <a href="#">Home</a>
+    <a href="#">Settings</a>
+    <a href="#">Contact</a>
+    <a href="#">Cart (<span id="cartCount">0</span>)</a>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+    <!-- Navbar -->
+    <div class="navbar">
+        <input type="text" id="search" placeholder="Search plants...">
+        <button onclick="showWishlist()">Wishlist (<span id="wishlistCount">0</span>)</button>
+    </div>
+
+    <!-- Products -->
+    <div class="products" id="productList">
+        <!-- Products will be inserted here dynamically -->
+    </div>
+</div>
+
+<script>
+    const products = [
+        { id: 1, name: "Aloe Vera", image: "https://i.imgur.com/1.jpg" },
+        { id: 2, name: "Snake Plant", image: "https://i.imgur.com/2.jpg" },
+        { id: 3, name: "Peace Lily", image: "https://i.imgur.com/3.jpg" },
+        { id: 4, name: "Cactus", image: "https://i.imgur.com/4.jpg" }
+    ];
+
+    let cart = [];
+    let wishlist = [];
+
+    function renderProducts(filter = "") {
+        const productList = document.getElementById("productList");
+        productList.innerHTML = "";
+        products
+            .filter(p => p.name.toLowerCase().includes(filter.toLowerCase()))
+            .forEach(product => {
+                productList.innerHTML += `
+                    <div class="product">
+                        <img src="${product.image}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <button class="btn" onclick="addToCart(${product.id})">Add to Cart</button>
+                        <button class="btn" onclick="addToWishlist(${product.id})">Add to Wishlist</button>
+                    </div>
+                `;
+            });
+    }
+
+    function addToCart(id) {
+        if (!cart.includes(id)) {
+            cart.push(id);
+            document.getElementById("cartCount").innerText = cart.length;
+        }
+    }
+
+    function addToWishlist(id) {
+        if (!wishlist.includes(id)) {
+            wishlist.push(id);
+            document.getElementById("wishlistCount").innerText = wishlist.length;
+        }
+    }
+
+    function showWishlist() {
+        alert("Wishlist Products: " + wishlist.map(id => products.find(p => p.id === id).name).join(", "));
+    }
+
+    document.getElementById("search").addEventListener("input", function() {
+        renderProducts(this.value);
+    });
+
+    // Initial render
+    renderProducts();
+</script>
+
+</body>
+</html>
 
